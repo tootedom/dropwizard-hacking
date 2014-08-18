@@ -1,0 +1,37 @@
+template: Hello, %s!
+defaultName: Stranger
+jsonDocUrl: http://localhost:8881/static/data.json
+
+server:
+ applicationConnectors:
+    - type: http
+      port: 10080
+ adminConnectors:
+    - type: http
+      port: 10081
+
+jerseyClientConfiguration:
+ minThreads: 1
+ maxThreads: 128
+ gzipEnabled: true
+ timeout: 2000ms
+ connectionTimeout: 500ms
+ timeToLive: 1h
+ cookiesEnabled: false
+ maxConnections: 1024
+ maxConnectionsPerRoute: 1024
+ keepAlive: 1000ms
+ retries: 0
+ userAgent: test 0.1
+
+usageClientConfiguration:
+ threadPoolSize: 1
+ usageEndpoint: http://localhost:8881/static/data.json
+ gzipEnabled: true
+ requestTimeout: 2000ms
+ connectionTimeout: 2000ms
+ timeToLive: 1h
+ cookiesEnabled: false
+ keepAlive: 1000ms
+ retries: 0
+ userAgent: test 0.1
