@@ -35,3 +35,8 @@ usageClientConfiguration:
  keepAlive: 1000ms
  retries: 0
  userAgent: test 0.1
+
+clientCommand:
+  executionIsolationThreadTimeoutInMillis: 10000
+  threadpool:
+    threadPoolCoreSize: 15

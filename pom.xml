@@ -18,11 +18,13 @@
     </properties>
 
     <dependencies>
+        <!--
         <dependency>
             <groupId>com.netflix.hystrix</groupId>
             <artifactId>hystrix-core</artifactId>
             <version>${hystrix.version}</version>
         </dependency>
+        -->
 
         <dependency>
             <groupId>io.dropwizard</groupId>
@@ -43,6 +45,18 @@
             <groupId>org.jfarcand</groupId>
             <artifactId>jersey-ahc-client</artifactId>
             <version>1.0.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.yammer.tenacity</groupId>
+            <artifactId>tenacity-core</artifactId>
+            <version>0.3.6-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.yammer.tenacity</groupId>
+            <artifactId>tenacity-testing</artifactId>
+            <version>0.3.5</version>
         </dependency>
 
 

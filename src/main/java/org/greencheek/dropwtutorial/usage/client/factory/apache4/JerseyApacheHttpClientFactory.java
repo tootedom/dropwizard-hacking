@@ -8,6 +8,8 @@ import org.greencheek.dropwtutorial.usage.client.UsageClient;
 import org.greencheek.dropwtutorial.usage.client.config.UsageClientConfiguration;
 import org.greencheek.dropwtutorial.usage.client.factory.ClientFactory;
 
+import java.util.UUID;
+
 /**
  * Created by dominictootell on 16/08/2014.
  */
@@ -21,7 +23,7 @@ public class JerseyApacheHttpClientFactory implements ClientFactory {
 
     public static UsageClient createUsageClient(UsageClientConfiguration configuration, Environment environment) {
         JerseyClientBuilder builder = new JerseyClientBuilder(environment).using(configuration.toJerseyClientConfiguration());
-        Client c =  builder.build(environment.getName());
+        Client c =  builder.build(environment.getName()+"-" + UUID.randomUUID().toString());
 
         return new JerseyUsageClient(c,configuration);
     }

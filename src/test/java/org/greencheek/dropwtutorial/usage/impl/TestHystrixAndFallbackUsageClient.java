@@ -2,6 +2,10 @@ package org.greencheek.dropwtutorial.usage.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.config.ConfigurationManager;
+import com.netflix.hystrix.Hystrix;
+import com.netflix.hystrix.strategy.HystrixPlugins;
+import com.yammer.tenacity.testing.TenacityTest;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import io.dropwizard.util.Duration;
@@ -23,6 +27,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -31,7 +36,7 @@ import static org.junit.Assert.*;
 /**
  * Created by dominictootell on 16/08/2014.
  */
-public class TestHystrixAndFallbackUsageClient {
+public class TestHystrixAndFallbackUsageClient extends TenacityTest{
 
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
     private String expectedEventAsString;
@@ -48,6 +53,8 @@ public class TestHystrixAndFallbackUsageClient {
 
     @Before
     public void setUp() throws JsonProcessingException {
+        testInitialization();
+        new HystrixPlugins.UnitTest().reset();
         expectedEvent = new ArticleViewEvent("session1234", "testRetryAndFallBack", "id1234");
         expectedEventAsString = MAPPER.writeValueAsString(expectedEvent);
         server = new EmbeddedTomcatServer();
@@ -57,6 +64,7 @@ public class TestHystrixAndFallbackUsageClient {
 
     @After
     public void tearDown() {
+        testTeardown();
         server.shutdownTomcat();
         if(usageClient!=null) {
             usageClient.shutdown();
@@ -69,6 +77,11 @@ public class TestHystrixAndFallbackUsageClient {
         for(String s : RULE.getEnvironment().metrics().getNames()) {
             RULE.getEnvironment().metrics().remove(s);
         }
+
+        Hystrix.reset(1, TimeUnit.SECONDS);
+        ConfigurationManager.getConfigInstance().clear();
+        new HystrixPlugins.UnitTest().reset();
+
     }
 
 

@@ -14,7 +14,7 @@ public class HystrixLoggingUsageClient implements UsageClient {
     private final UsageClient wrappedClient;
     private final UsageClient fallbackClient;
 
-    private final HystrixCommand.Setter commandConfiguration;
+//    private final HystrixCommand.Setter commandConfiguration;
 
     public HystrixLoggingUsageClient(UsageClient wrappedClient,
                                      UsageClientConfiguration configuration,
@@ -22,23 +22,25 @@ public class HystrixLoggingUsageClient implements UsageClient {
         this.wrappedClient = wrappedClient;
         this.fallbackClient = fallbackClient;
 
-        HystrixCommand.Setter setter = HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(configuration.getHystrixUsageKey() + "Group"));
+//        HystrixCommand.Setter setter = HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(configuration.getHystrixUsageKey() + "Group"));
+//
+//        setter.andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter().withCoreSize(configuration.getThreadPoolSize())
+//                .withMaxQueueSize(configuration.getUsageEventQueueSize()));
+//
+//        setter.andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+//                .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD)
+//                .withExecutionIsolationThreadTimeoutInMilliseconds((int) (configuration.getRequestTimeout().toMilliseconds())));
+//
+//        setter.andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(configuration.getHystrixUsageKey()));
 
-        setter.andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter().withCoreSize(configuration.getThreadPoolSize())
-                .withMaxQueueSize(configuration.getUsageEventQueueSize()));
-
-        setter.andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
-                .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD)
-                .withExecutionIsolationThreadTimeoutInMilliseconds((int) (configuration.getRequestTimeout().toMilliseconds())));
-
-        setter.andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(configuration.getHystrixUsageKey()));
-
-        commandConfiguration = setter;
+//        commandConfiguration = setter;
     }
 
     @Override
     public void fireUsageEvent(UsageEvent event) throws FailedToFireUsageEventException {
-        new HystrixLoggingUsageCommand(wrappedClient,commandConfiguration,event,fallbackClient).execute();
+        new HystrixLoggingUsageCommand(wrappedClient,event,fallbackClient).execute();
+
+        new HystrixLoggingUsageCommand2(wrappedClient,event,fallbackClient);
     }
 
     @Override
